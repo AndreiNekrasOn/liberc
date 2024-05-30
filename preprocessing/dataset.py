@@ -60,11 +60,11 @@ def process_sequence(sequence_name, img_dir, QP, QPWZ):
         for qp in QP:
             df = pd.DataFrame()
             print(qp, end=', ', flush=True)
-            data, lengths = read_binary_data(f'./eldat_rsi/eldat_rsi_{sequence_name}_qcif_15fps.yuv-{qp}_{qpwz}.csv')
+            data, lengths = read_binary_data(f'../dataset/eldat_rsi/eldat_rsi_{sequence_name}_qcif_15fps.yuv-{qp}_{qpwz}.csv')
             for i, (d, length) in enumerate(zip(data, lengths)):
                 unpacked = np.unpackbits(d)
                 df = pd.concat([df, pd.DataFrame({'data': [unpacked], 'length': length})])
-            df['ones'] = df['data'].apply(lambda x: np.sum(x))
+            df['entropy'] = df['data'].apply(lambda x: computeEntropy(x))
             df.to_pickle(f'./data/{sequence_name}/{sequence_name}_{qpwz}_{qp}.pkl')
         print(']')
     print()

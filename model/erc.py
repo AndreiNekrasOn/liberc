@@ -1,5 +1,6 @@
 import numpy as np
 from time import sleep
+import argparse
 
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
@@ -14,7 +15,7 @@ from dataset import convert_bitplane_to_image
 np.set_printoptions(threshold=np.inf) # pyright: ignore
 
 
-MODEL_NAME = '/home/andrei/dvc/nofeedbackpolardvc/ML/models/regression-rmsprop-big.keras'
+MODEL_NAME = ''
 NAMED_PIPE_BITPLANE = '/tmp/dvc_pipe_bitplane'
 NAMED_PIPE_LABEL = '/tmp/dvc_pipe_label'
 
@@ -66,6 +67,11 @@ def pipe_loop(model):
 
 
 if __name__ == "__main__":
+    # read arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--model', type=str, help='ML model name')
+    args = parser.parse_args()
+    MODEL_NAME = args.model
     print("Initializing ML model...")
     model = load_model()
     pipe_loop(model)

@@ -11,7 +11,7 @@ from dataset import SEQUENCES, CLASSES
 def read_pickled_dataframes():    
     data_dir = "./data" 
     dataframes = []
-    for seq in SEQUENCES:
+    for seq in ['akiyo']:
         files = os.listdir(f'{data_dir}/{seq}')
         for file in files:
             df = pd.read_pickle(f'{data_dir}/{seq}/{file}')
@@ -55,6 +55,7 @@ if __name__ == "__main__":
     print('Filtering dataframes...')
     filtered = filter_dfs()
     print('Generating images...')
+    CLASSES = np.array(CLASSES)
     get_class = lambda row: CLASSES[np.argmax(CLASSES > row['length'])]
     for i, row in filtered.iterrows():
         convert_bitplane_to_image(row['data'], f'./{img_dir}/train/{get_class(row):04d}/{row["filename"]}_n{i}.png') # pyright: ignore 
